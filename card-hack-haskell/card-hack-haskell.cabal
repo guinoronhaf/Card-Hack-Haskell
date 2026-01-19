@@ -25,6 +25,7 @@ source-repository head
 
 library
   exposed-modules:
+      Components.Deck
       Lib
   other-modules:
       Paths_card_hack_haskell
