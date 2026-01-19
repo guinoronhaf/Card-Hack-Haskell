@@ -59,4 +59,7 @@ import Components.Deck
 --     putStrLn ("Dealers value = " ++ show dealersValue)
 
 main :: IO ()
-main = print(generateDeck)
+main = do
+	let m = generateDeck
+	let m1 = removeCard "J" m
+	print(getValue "X" m1)
