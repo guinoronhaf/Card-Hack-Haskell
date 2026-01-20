@@ -1,5 +1,3 @@
-module Main (main) where
-
 import Text.Read (readMaybe)
 import Control.Exception
 import Control.Monad (unless)
