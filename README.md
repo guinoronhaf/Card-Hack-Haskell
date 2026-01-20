@@ -1,8 +1,20 @@
 # Card-Hack-Haskell
 Implementação de Card Hack em Haskell.
 
-### rodem o programa com esse comando para que os arquivos de compilação irem para a pasta 'out'
+Considerando que o `stack` esteja instalado na máquina, primeiro vá para o diretório raiz do projeto:
 
 ```bash
-ghc main.hs -outputdir out -o out/main && ./out/main
+cd ./card-hack-haskell
+```
+
+Agora, para compilar o projeto, rode:
+
+```bash
+stack build
+```
+
+Por fim, para executar o arquivo `Main.hs`, rode:
+
+```bash
+stack exec card-hack-haskell-exe
 ```
