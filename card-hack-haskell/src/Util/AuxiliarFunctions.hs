@@ -41,3 +41,4 @@ setUpCards inputs =
         usersTuple = head cardsToArray
         dealersTuple = cardsToArray !! 1
     in Map.fromList [("user", usersTuple), ("dealer", dealersTuple)]
+    
