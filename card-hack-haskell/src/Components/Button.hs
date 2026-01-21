@@ -1,7 +1,4 @@
-module Button
-  ( buttonUnicode
-  , 
-  ) where
+module Components.Button ( buttonUnicode ) where
 
 buttonUnicode :: String -> IO ()
 buttonUnicode txt = do
