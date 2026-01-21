@@ -1,5 +1,5 @@
 -- exportando as funções que serão utilizadas no projeto
-module Components.Deck (generateDeck, removeCard, getValue) where 
+module Components.Deck (generateDeck, removeCards, getValue, howManyCards) where 
 
 -- importando Data.Map para trabalhar com mapas
 import qualified Data.Map as Map
@@ -15,13 +15,15 @@ generateDeck :: Map.Map String Int
 generateDeck = Map.fromList (map (\x -> (x, 4)) cardsList)
 
 -- remolção de um carta específica do baralho, atualizando o mapa
-removeCard :: String -> Map.Map String Int -> Map.Map String Int 
-removeCard key deckMap = do
-	let f k v = if k == key && v /= 0 then
+removeCards :: [String] -> Map.Map String Int -> Map.Map String Int 
+removeCards [] deckMap = deckMap
+removeCards (x:xs) deckMap = do
+	let f k v = if k == x && v /= 0 then
 				   v - 1
 				else
 				   v
-	Map.adjustWithKey f key deckMap
+	let newDeck = Map.adjustWithKey f x deckMap
+	removeCards xs newDeck
 
 -- retorna a quantidade de cartas de um determinado símbolo no baralho
 getValue :: String -> Map.Map String Int -> Int 
@@ -31,3 +33,8 @@ getValue key deckMap = do
 		fromJust value
 	else
 		-1
+
+-- retorna a quantidade de cartas que existem no baralho
+howManyCards :: [String] -> Map.Map String Int -> Int
+howManyCards [] _ = 0
+howManyCards (x:xs) deckMap = (getValue x deckMap) + howManyCards xs deckMap
