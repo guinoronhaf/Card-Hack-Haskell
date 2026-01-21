@@ -1,5 +1,5 @@
 import Util.AuxiliarFunctions (setUpCards, sumCards)
-import Button (buttonUnicode)
+import Button.buttonUnicode (buttonUnicode)
 import qualified Data.Map as Map
 import Data.Maybe (fromJust)
 import Data.Char (toLower)

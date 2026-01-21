@@ -1,4 +1,4 @@
-module Botao
+module Button
   ( buttonUnicode
   , 
   ) where
