@@ -8,16 +8,26 @@ showResult :: [Float] -> ()
 showResult possibilites = do
     putStrLn $ "Chance de vencer ao puxar mais uma carta: " ++ show (fst possibilites)
     putStrLn $ "Chance de vencer ao não puxar nehuma carta"  ++ show (snd possibilites)
-    
+
+userOptions :: IO -> 
+userOption = do
+   userOption <- getLine
+
+    if (map toLower userOption) ==  "s" then putStrLn "Encerrando o jogo..."
+    else if (map toLower userOption) == "j" do
+        putStrLn "Inicando novo jogo"
+        setUpCards
+    else do 
+        putStrLn "Opção inválida"
+        userOption
+  
 nextGame :: IO -> ()
 nextGame = do 
     buttonUnicode "Jogar novamente (J)"
     buttonUnicode "Sair (S)"
-    userOption <- getLine
 
-    if (map toLower userOption) ==  "j" then setUpCards
-    else (map toLower userOption) == "s" then putStrLn "Encerrando o jogo..."
-
+    userOption
+    
 main = do
     putStrLn "Digite as suas cartas (separadas por ''):"
     usersCard <- getLine
@@ -37,5 +47,5 @@ main = do
     putStrLn $ "A soma do dealer: " ++ show (sumCards arrayDealersCard)
 
 
-    
+
 
