@@ -1,4 +1,4 @@
-module Components.ProbAlgorithm (blackjackProb) where
+module Components.ProbAlgorithm (blackjackProb, underflowProb, overflowProb) where
 
 import qualified Data.Map as Map -- trabalhar com mapas
 import Data.Ratio as Ratio -- trabalhar precisamente com números em ponto flutuante
@@ -25,21 +25,35 @@ blackjackProb cards deck = do
 				   else 0
 	fromIntegral qtdeDiff / fromIntegral total
 
--- underflowProb :: [String] -> Map.Map String Int -> Ratio
--- underflowProb cards deck = do
--- 	let sum = Aux.sumCards cards
--- 	let diff = 20 - sum
--- 	let qtdeDiff = if diff `elem` [2..9] then
--- 					Deck.getValue (show diff) deck
--- 				   else if diff `elem` [1, 11] then
--- 				   	Deck.getValue "A" deck
--- 				   else
--- 				    Deck.getValue "J" deck + Deck.getValue "Q" deck + Deck.getValue "K" deck
---
--- overflowProb :: [String] -> Map.Map String Int -> Ratio
--- overflowProb cards deck = do
--- 	let sum = Aux.sumCards cards
+underflowProb :: [String] -> Map.Map String Int -> Double
+underflowProb cards deck = do
+	let sum = Aux.sumCards cards
+	let diff = 20 - sum
+	let total =  Deck.howManyCards ((map (\x -> (show x)) [2..10]) ++ ["J", "Q", "K", "A"]) deck
+	let qtdeDiff = if diff <= 0 then
+					0
+				   else if diff == 1 then
+					Deck.getValue "A" deck
+				   else if diff `elem` [2..9] then
+					Deck.howManyCards ((map (\x -> (show x)) [2..diff]) ++ ["A"]) deck
+				   else total
 
+	fromIntegral qtdeDiff / fromIntegral total
+	
+
+overflowProb :: [String] -> Map.Map String Int -> Double
+overflowProb cards deck = do
+	let sum = Aux.sumCards cards
+	let diff = 22 - sum
+	let total =  Deck.howManyCards ((map (\x -> (show x)) [2..10]) ++ ["J", "Q", "K", "A"]) deck
+	let qtdeDiff = if diff > 10 then
+					0
+				   else if diff `elem` [2..10] then
+					Deck.howManyCards ((map (\x -> (show x)) [diff..10]) ++ ["J", "Q", "K"]) deck
+				   else total
+					
+
+	fromIntegral qtdeDiff / fromIntegral total
 -- getProb
 
 testFunc :: String
