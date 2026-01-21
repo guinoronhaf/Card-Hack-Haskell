@@ -9,25 +9,26 @@ showResult possibilites = do
     putStrLn $ "Chance de vencer ao puxar mais uma carta: " ++ show (fst possibilites)
     putStrLn $ "Chance de vencer ao não puxar nehuma carta"  ++ show (snd possibilites)
 
-userOptions :: IO -> 
+userOption :: IO ()
 userOption = do
-   userOption <- getLine
+    userInput <- getLine
 
-    if (map toLower userOption) ==  "s" then putStrLn "Encerrando o jogo..."
-    else if (map toLower userOption) == "j" do
-        putStrLn "Inicando novo jogo"
-        setUpCards
-    else do 
-        putStrLn "Opção inválida"
-        userOption
-  
-nextGame :: IO -> ()
+    case (map toLower userInput) of
+        "s" -> putStrLn "Encerrando o jogo..."
+        "j" -> do
+            putStrLn "Iniciando novo jogo"
+            setUpCards
+        _ -> do
+            putStrLn "Opção inválida"
+            userOption
+            
+nextGame :: IO ()
 nextGame = do 
     buttonUnicode "Jogar novamente (J)"
     buttonUnicode "Sair (S)"
 
     userOption
-    
+
 main = do
     putStrLn "Digite as suas cartas (separadas por ''):"
     usersCard <- getLine
