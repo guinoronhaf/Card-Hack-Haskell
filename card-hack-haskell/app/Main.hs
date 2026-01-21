@@ -14,7 +14,7 @@ userOption = do
     userInput <- getLine
 
     case (map toLower userInput) of
-        "s" -> putStrLn "Encerrando o jogo..."
+        "s" -> putStrLn "Fim do programa, obrigado pela preferência. Ass: CARD-HACK"
         "j" -> do
             putStrLn "Iniciando novo jogo"
             setUpCards
@@ -29,7 +29,8 @@ nextGame = do
 
     userOption
 
-main = do
+gameLoop :: IO ()
+gameLoop = do
     putStrLn "Digite as suas cartas (separadas por ''):"
     usersCard <- getLine
 
@@ -37,16 +38,35 @@ main = do
     dealersCard <- getLine
 
     let mapCards = setUpCards [usersCard, dealersCard]
-        arrayUsersCards = fromJust (Map.lookup "user" mapCards)
-        arrayDealersCard = fromJust (Map.lookup "dealer" mapCards)
+
+    -- call do algoritmo (Funcionalidade 2)
+
+    -- mostrar as possibilidades (Funcionalidade 4)
+    -- showResult possibilidades
+
+    -- solicitair reinicio de programa (Fucnionalidade 5)
+    nextGame
+
+    restartButton
+
+-- restartButton :: IO ()
+-- restartButton = do
+--     putStrLn "Deseja reiniciar o programa? (Y / N)"
+--     input <- getLine
+
+--     case restartCases input of 
+--         'Y' -> gameLoop
+--         'R' -> restartButton
+--         'N' -> putStrLn "Fim do programa, obrigado pela preferência. Ass: CARD-HACK"
 
 
-    putStrLn $ "Cartas do usuario: " ++ show arrayUsersCards
-    putStrLn $ "Cartas do dealer "  ++ show arrayDealersCard
+-- restartCases :: String -> Char
+-- restartCases input = 
+--     case (map toUpper input) of 
+--         "Y" -> 'Y' 
+--         "N" -> 'N'
+--         _   -> 'R' -- input invalido, refazer
 
-    putStrLn $ "A soma do usuario: " ++ show (sumCards arrayUsersCards)
-    putStrLn $ "A soma do dealer: " ++ show (sumCards arrayDealersCard)
-
-
-
+main = do
+    gameLoop
 

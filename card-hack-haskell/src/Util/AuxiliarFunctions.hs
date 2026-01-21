@@ -15,7 +15,7 @@ split sep (c:cs)
 
 -- pega os valores das cartas,  em que caso seja 'A' = 11, numero = seu oroprio valor; 'J', 'Q', 'K' = 10.
 getStrValue :: String -> Int
-getStrValue "A" = 11
+getStrValue "A" = 11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
 getStrValue s = case (readMaybe s :: Maybe Int) of
     Just n -> n
     Nothing -> 10 -- se for uma letra, retorna 10 -> ps: o "A" deve ser tratado de maneira especial no algoritmo 
@@ -41,3 +41,4 @@ setUpCards inputs =
         usersTuple = head cardsToArray
         dealersTuple = cardsToArray !! 1
     in Map.fromList [("user", usersTuple), ("dealer", dealersTuple)]
+    
