@@ -17,7 +17,7 @@ gameLoop = do
 
     let mapCards = setUpCards [usersCard, dealersCard]
 
-    -- parte do algoritmo (Funcionalidade 2)
+    -- call do algoritmo (Funcionalidade 2)
 
     -- mostrar as possibilidades (Funcionalidade 4)
     
