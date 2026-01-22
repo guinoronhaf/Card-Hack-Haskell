@@ -4,7 +4,7 @@ import qualified Data.Map as Map
 import Data.Maybe (fromJust)
 import Data.Char (toLower)
 
-showResult :: [Float] -> ()
+showResult :: (Float, Float) -> IO ()
 showResult possibilites = do
     putStrLn $ "Chance de vencer ao puxar mais uma carta: " ++ show (fst possibilites)
     putStrLn $ "Chance de vencer ao não puxar nehuma carta"  ++ show (snd possibilites)
@@ -17,7 +17,7 @@ userOption = do
         "s" -> putStrLn "Fim do programa, obrigado pela preferência. Ass: CARD-HACK"
         "j" -> do
             putStrLn "Iniciando novo jogo"
-            setUpCards
+            gameLoop
         _ -> do
             putStrLn "Opção inválida"
             userOption
@@ -31,10 +31,10 @@ nextGame = do
 
 gameLoop :: IO ()
 gameLoop = do
-    putStrLn "Digite as suas cartas (separadas por ''):"
+    buttonUnicode "Digite as suas cartas (separadas por ''):"
     usersCard <- getLine
 
-    putStrLn "Digite a carta do Dealer:"
+    buttonUnicode "Digite a carta do Dealer:"
     dealersCard <- getLine
 
     let mapCards = setUpCards [usersCard, dealersCard]
@@ -46,8 +46,6 @@ gameLoop = do
 
     -- solicitair reinicio de programa (Fucnionalidade 5)
     nextGame
-
-    restartButton
 
 -- restartButton :: IO ()
 -- restartButton = do
