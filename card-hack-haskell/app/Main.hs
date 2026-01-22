@@ -44,10 +44,10 @@
 
 import Components.Deck as Deck
 import Components.ProbAlgorithm as Prob
+import qualified Data.Map as Map
+import Data.Maybe (fromJust)
 
 main :: IO ()
 main = do
-	let m = Deck.generateDeck
-	let m1 = Deck.removeCards ["J", "J"] m
-	let prob = Prob.blackjackProb ["J", "J"] m1
-	print(prob)
+	let m = Map.fromList [("user", ["J", "J", "2"]), ("dealer", ["A"])]
+	print(Prob.calculateProbs m)

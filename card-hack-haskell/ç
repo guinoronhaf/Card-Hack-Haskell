@@ -55,13 +55,7 @@ overflowProb cards deck = do
 				   else total
 	fromIntegral qtdeMatchingCards / fromIntegral total
 
-calculateProbs :: Map.Map String [String] -> (Double, Double)
+calculateProbs :: Map.Map String [String] -> IO ()
 calculateProbs cardsMap = do
 	let userCards = fromJust (Map.lookup "user" cardsMap)
-	let dealerCards = fromJust (Map.lookup "dealer" cardsMap)
-	if isBlackjack userCards then
-		(0.0, 1.0)
-	else if isOverflow userCards then
-		(0.0, 0.0)
-	else do
-		
+	let userCards = fromJust (Map.lookup "dealer" cardsMap)
