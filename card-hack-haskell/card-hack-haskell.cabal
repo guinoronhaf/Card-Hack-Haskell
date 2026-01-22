@@ -1,6 +1,6 @@
 cabal-version: 2.2
 
--- This file has been generated from package.yaml by hpack version 0.39.1.
+-- This file has been generated from package.yaml by hpack version 0.38.1.
 --
 -- see: https://github.com/sol/hpack
 
@@ -29,6 +29,7 @@ library
       Components.Deck
       Lib
       Util.AuxiliarFunctions
+      Util.Game
   other-modules:
       Paths_card_hack_haskell
   autogen-modules:
