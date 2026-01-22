@@ -1,4 +1,4 @@
-import Util.AuxiliarFunctions (setUpCards, sumCards)
+import Util.AuxiliarFunctions (setUpCards, sumCards, verifyQauntityCards)
 import Components.Button (buttonUnicode)
 import qualified Data.Map as Map
 import Data.Maybe (fromJust)
@@ -39,6 +39,10 @@ gameLoop = do
 
     let mapCards = setUpCards [usersCard, dealersCard]
 
+    if verifyQauntityCards mapCards 
+        then putStrLn "Quantidade Ok de cartas"
+        else putStrLn "Quantidade de cartas acima de 4" 
+
     -- call do algoritmo (Funcionalidade 2)
 
     -- mostrar as possibilidades (Funcionalidade 4)
@@ -46,24 +50,6 @@ gameLoop = do
 
     -- solicitair reinicio de programa (Fucnionalidade 5)
     nextGame
-
--- restartButton :: IO ()
--- restartButton = do
---     putStrLn "Deseja reiniciar o programa? (Y / N)"
---     input <- getLine
-
---     case restartCases input of 
---         'Y' -> gameLoop
---         'R' -> restartButton
---         'N' -> putStrLn "Fim do programa, obrigado pela preferência. Ass: CARD-HACK"
-
-
--- restartCases :: String -> Char
--- restartCases input = 
---     case (map toUpper input) of 
---         "Y" -> 'Y' 
---         "N" -> 'N'
---         _   -> 'R' -- input invalido, refazer
 
 main = do
     gameLoop

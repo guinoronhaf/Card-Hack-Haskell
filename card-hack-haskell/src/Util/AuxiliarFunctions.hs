@@ -1,7 +1,8 @@
-module Util.AuxiliarFunctions (getStrValue, sumCards, adjustAces, setUpCards) where
+module Util.AuxiliarFunctions (getStrValue, sumCards, adjustAces, setUpCards, verifyQauntityCards) where
 
 import Text.Read (readMaybe)
 import Control.Monad (unless)
+import Data.Maybe (fromJust)
 import qualified Data.Map as Map
 
 -- função split
@@ -41,4 +42,26 @@ setUpCards inputs =
         usersTuple = head cardsToArray
         dealersTuple = cardsToArray !! 1
     in Map.fromList [("user", usersTuple), ("dealer", dealersTuple)]
+
+verifyQauntityCards :: Map.Map String [String] -> Bool
+verifyQauntityCards m = validateQuantityTuple (fromJust (Map.lookup "user" m)) (head (fromJust (Map.lookup "dealer" m))) 
+        
+validateQuantityTuple :: [String] -> String -> Bool
+validateQuantityTuple usersTuple dealerCard =
+    let mapInput    = createMapCardsInput usersTuple
+        mapAdjusted = Map.adjust (+1) dealerCard mapInput
+    in filterQuantityAboveLimitCards mapAdjusted
+
+filterQuantityAboveLimitCards :: Map.Map String Int -> Bool
+filterQuantityAboveLimitCards m = Map.null (Map.filter (> 4) m)
+
+createMapCardsInput :: [String] -> Map.Map String Int
+createMapCardsInput usersTuple = Map.fromList (map (\x -> (x, (getCardQuantity usersTuple x))) usersTuple)
+
+
+getCardQuantity :: [String] -> String -> Int
+getCardQuantity (c:cs) x 
+    | c == x    = (getCardQuantity cs x) + 1
+    | cs == []  = 0  
+    | otherwise = (getCardQuantity cs x) + 0
     
