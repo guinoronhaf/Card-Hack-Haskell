@@ -60,8 +60,4 @@ createMapCardsInput usersTuple = Map.fromList (map (\x -> (x, (getCardQuantity u
 
 
 getCardQuantity :: [String] -> String -> Int
-getCardQuantity (c:cs) x 
-    | c == x    = (getCardQuantity cs x) + 1
-    | cs == []  = 0  
-    | otherwise = (getCardQuantity cs x) + 0
-    
+getCardQuantity cards x = length (filter (== x) cards)
