@@ -39,6 +39,7 @@ library
   build-depends:
       base >=4.7 && <5
     , containers
+    , random
   default-language: Haskell2010
 
 executable card-hack-haskell-exe
@@ -54,6 +55,7 @@ executable card-hack-haskell-exe
       base >=4.7 && <5
     , card-hack-haskell
     , containers
+    , random
   default-language: Haskell2010
 
 test-suite card-hack-haskell-test
@@ -70,4 +72,5 @@ test-suite card-hack-haskell-test
       base >=4.7 && <5
     , card-hack-haskell
     , containers
+    , random
   default-language: Haskell2010
