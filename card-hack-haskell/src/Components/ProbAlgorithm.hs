@@ -1,4 +1,4 @@
-module Components.ProbAlgorithm (blackjackProb, calculateProbs) where
+module Components.ProbAlgorithm where
 
 import qualified Data.Map as Map -- trabalhar com mapas
 import Data.Ratio as Ratio -- trabalhar precisamente com números em ponto flutuante
@@ -7,7 +7,7 @@ import Util.AuxiliarFunctions as Aux -- utilizar funções auxiliares para compo
 import Data.Maybe (isJust, fromJust) -- trabalhar com Just nos mapas
 
 totalCardsInDeck :: Map.Map String Int -> Int
-totalCardsInDeck deck = Deck.howManyCards ((map (\x -> show x) [2..9]) ++ ["J", "K", "Q", "A"]) deck
+totalCardsInDeck deck = Deck.howManyCards ((map (\x -> show x) [2..10]) ++ ["J", "K", "Q", "A"]) deck
 
 updateDeck :: [String] -> Map.Map String Int -> Map.Map String Int
 updateDeck cards deck = Deck.removeCards cards deck
@@ -17,6 +17,35 @@ isBlackjack cards = (Aux.sumCards cards) == 21
 
 isOverflow :: [String] -> Bool
 isOverflow cards = (Aux.sumCards cards) > 21
+
+underflowBlackjackProb :: [String] -> Map.Map String Int -> Double
+underflowBlackjackProb cards deck = underflowProb cards 21 deck
+
+overflowBlackjackProb :: [String] -> Map.Map String Int -> Double
+overflowBlackjackProb cards deck = overflowProb cards 21 deck
+
+overflowProb :: [String] -> Int -> Map.Map String Int -> Double
+overflowProb cards limit deck = do
+	let edge = limit - (Aux.sumCards cards)
+	if edge <= 0 then
+		1.0
+	else do
+		let minValue = edge + 1
+		let matchingCards = (map (\x -> show x) [edge..10]) ++ ["J", "K", "Q"]
+		fromIntegral (Deck.howManyCards matchingCards deck) / fromIntegral (totalCardsInDeck deck)
+
+underflowProb :: [String] -> Int -> Map.Map String Int -> Double
+underflowProb cards limit deck = do
+	let edge = limit - (Aux.sumCards cards)
+	if edge <= 0 then
+		0.0
+	else do
+		let maxValue = edge - 1
+		let matchingCards = if maxValue >= 10 then
+								["J", "K", "Q"] ++ (map (\x -> show x) [10,9..2])
+							else
+								(map (\x -> show x) [maxValue,maxValue-1..2])
+		fromIntegral (Deck.howManyCards matchingCards deck) / fromIntegral (totalCardsInDeck deck)
 
 blackjackProb :: [String] -> Map.Map String Int -> Double 
 blackjackProb cards deck = do
@@ -30,31 +59,6 @@ blackjackProb cards deck = do
 						else []
 	fromIntegral (Deck.howManyCards matchingCards deck) / fromIntegral (totalCardsInDeck deck)
 
-underflowProb :: [String] -> Map.Map String Int -> Double
-underflowProb cards deck = do
-	let underflowEdge = 20 - (Aux.sumCards cards)
-	let total = totalCardsInDeck deck
-	let qtdeMatchingCards = if underflowEdge <= 0 then
-					0
-				   else if underflowEdge == 11 then
-				   	Deck.howManyCards ["A"] deck
-				   else if underflowEdge `elem` [2..9] then
-					Deck.howManyCards ((map (\x -> (show x)) [2..underflowEdge]) ++ ["A"]) deck
-				   else total
-	fromIntegral qtdeMatchingCards / fromIntegral total
-
-
-overflowProb :: [String] -> Map.Map String Int -> Double
-overflowProb cards deck = do
-	let overflowEdge = 22 - (Aux.sumCards cards)
-	let total =  Deck.howManyCards ((map (\x -> (show x)) [2..10]) ++ ["J", "Q", "K", "A"]) deck
-	let qtdeMatchingCards = if overflowEdge > 10 then
-					0
-				   else if overflowEdge `elem` [2..10] then
-					Deck.howManyCards ((map (\x -> (show x)) [overflowEdge..10]) ++ ["J", "Q", "K"]) deck
-				   else total
-	fromIntegral qtdeMatchingCards / fromIntegral total
-
 calculateProbs :: Map.Map String [String] -> (Double, Double)
 calculateProbs cardsMap = do
 	let userCards = fromJust (Map.lookup "user" cardsMap)
@@ -63,5 +67,4 @@ calculateProbs cardsMap = do
 		(0.0, 1.0)
 	else if isOverflow userCards then
 		(0.0, 0.0)
-	else do
-		
+	else (1, 2)

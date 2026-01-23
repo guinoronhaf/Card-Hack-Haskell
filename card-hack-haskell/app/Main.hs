@@ -49,5 +49,9 @@ import Data.Maybe (fromJust)
 
 main :: IO ()
 main = do
-	let m = Map.fromList [("user", ["J", "J", "2"]), ("dealer", ["A"])]
-	print(Prob.calculateProbs m)
+	let m = Deck.generateDeck
+	let uCards = ["3"]
+	let dCards = ["Q", "5"]
+	let m1 = Deck.removeCards dCards (Deck.removeCards uCards m)
+	let p = Prob.underflowProb uCards 15 m1
+	print(p)
