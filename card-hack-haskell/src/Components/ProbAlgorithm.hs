@@ -1,4 +1,4 @@
-module Components.ProbAlgorithm where
+module Components.ProbAlgorithm (calculateProbs) where
 
 import qualified Data.Map as Map -- trabalhar com mapas
 import Data.Ratio as Ratio -- trabalhar precisamente com números em ponto flutuante

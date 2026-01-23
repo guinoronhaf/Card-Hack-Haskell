@@ -1,15 +1,12 @@
 module Util.Game (gameLoop) where 
 
-import Util.AuxiliarFunctions (setUpCards, sumCards, verifyQauntityCards)
-import Components.Button (buttonUnicode)
 import qualified Data.Map as Map
 import Data.Maybe (fromJust)
 import Data.Char (toLower)
-
-showResult :: (Float, Float) -> IO ()
-showResult possibilites = do
-    putStrLn $ "Chance de vencer ao puxar mais uma carta: " ++ show (fst possibilites)
-    putStrLn $ "Chance de vencer ao não puxar nehuma carta"  ++ show (snd possibilites)
+import Util.AuxiliarFunctions (setUpCards, sumCards, verifyQauntityCards)
+import Components.Button (buttonUnicode)
+import Components.ProbAlgorithm as Prob
+import Components.ProbInterpreter as Interpreter
 
 userOption :: IO ()
 userOption = do
@@ -41,14 +38,16 @@ gameLoop = do
 
     let mapCards = setUpCards [usersCard, dealersCard]
 
-    if verifyQauntityCards mapCards 
-        then putStrLn "Quantidade Ok de cartas"
-        else putStrLn "Quantidade de cartas acima de 4" 
+    if verifyQauntityCards mapCards
+    then do 
+        putStrLn ""
+        
+        -- call do algoritmo (Funcionalidade 2)
+        let probTuple = Prob.calculateProbs mapCards
 
-    -- call do algoritmo (Funcionalidade 2)
+        -- mostrar as possibilidades (Funcionalidade 4)
+        putStrLn $ Interpreter.probAnalise probTuple
+    else do
+        putStrLn "ERRO: quantidade de um unico numero de carta acima de 4"
 
-    -- mostrar as possibilidades (Funcionalidade 4)
-    -- showResult possibilidades
-
-    -- solicitair reinicio de programa (Fucnionalidade 5)
     nextGame
