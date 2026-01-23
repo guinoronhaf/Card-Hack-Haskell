@@ -1,0 +1,26 @@
+name: Haskell Stack CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: card-hack-haskell
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Haskell (Stack)
+        uses: haskell/actions/setup@v2
+        with:
+          enable-stack: true
+      
+      - name: Build project
+        run: stack build
