@@ -1,9 +1,11 @@
-module Util.AuxiliarFunctions (getStrValue, sumCards, adjustAces, setUpCards, verifyQauntityCards) where
+module Util.AuxiliarFunctions (getStrValue, sumCards, adjustAces, setUpCards, verifyQauntityCards, truncateAt, randomInt) where
 
 import Text.Read (readMaybe)
 import Control.Monad (unless)
 import Data.Maybe (fromJust)
 import qualified Data.Map as Map
+import System.Random (randomRIO)
+import System.IO.Unsafe (unsafePerformIO)
 
 -- função split
 split :: Char -> String -> [String]
@@ -58,6 +60,11 @@ filterQuantityAboveLimitCards m = Map.null (Map.filter (> 4) m)
 createMapCardsInput :: [String] -> Map.Map String Int
 createMapCardsInput usersTuple = Map.fromList (map (\x -> (x, (getCardQuantity usersTuple x))) usersTuple)
 
-
 getCardQuantity :: [String] -> String -> Int
 getCardQuantity cards x = length (filter (== x) cards)
+
+truncateAt :: Double -> Int -> Double
+truncateAt x n = fromIntegral (floor (x * (10 ^ n))) / (10 ^ n)
+
+randomInt :: Int -> Int -> Int
+randomInt low high = unsafePerformIO $ randomRIO (low, high)

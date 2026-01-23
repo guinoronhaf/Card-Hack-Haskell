@@ -5,17 +5,6 @@ import Data.Ratio as Ratio -- trabalhar precisamente com números em ponto flutu
 import Components.Deck as Deck -- instanciar o mapa que representa o baralho
 import Util.AuxiliarFunctions as Aux -- utilizar funções auxiliares para compor o jogo
 import Data.Maybe (isJust, fromJust) -- trabalhar com Just nos mapas
-import System.Random (randomRIO)
-import System.IO.Unsafe (unsafePerformIO)
-
-randomInt :: Int -> Int -> Int
-randomInt low high = unsafePerformIO $ randomRIO (low, high)
-
-totalCardsInDeck :: Map.Map String Int -> Int
-totalCardsInDeck deck = Deck.howManyCards ((map (\x -> show x) [2..10]) ++ ["J", "K", "Q", "A"]) deck
-
-updateDeck :: [String] -> Map.Map String Int -> Map.Map String Int
-updateDeck cards deck = Deck.removeCards cards deck
 
 isBlackjack :: [String] -> Bool
 isBlackjack cards = (Aux.sumCards cards) == 21
@@ -30,39 +19,39 @@ overflowBlackjackProb :: [String] -> Map.Map String Int -> Double
 overflowBlackjackProb cards deck = overflowProb cards 21 deck
 
 overflowProb :: [String] -> Int -> Map.Map String Int -> Double
-overflowProb cards limit deck = do
+overflowProb cards limit deck =
 	let edge = limit - (Aux.sumCards cards)
-	if edge <= 0 then
+	in if edge <= 0 then
 		1.0
-	else do
-		let minValue = edge + 1
-		let matchingCards = (map (\x -> show x) [edge..10]) ++ ["J", "K", "Q"]
-		fromIntegral (Deck.howManyCards matchingCards deck) / fromIntegral (totalCardsInDeck deck)
+	else
+		let matchingCards = (map show [(edge + 1)..10]) ++ ["J", "K", "Q"]
+		in fromIntegral (Deck.howManyCards matchingCards deck) / fromIntegral (Deck.totalCardsInDeck deck)
 
 underflowProb :: [String] -> Int -> Map.Map String Int -> Double
-underflowProb cards limit deck = do
+underflowProb cards limit deck =
 	let edge = limit - (Aux.sumCards cards)
-	if edge <= 0 then
+	in if edge <= 0 then
 		0.0
-	else do
-		let maxValue = edge - 1
-		let matchingCards = if maxValue >= 10 then
-								["J", "K", "Q"] ++ (map (\x -> show x) [10,9..2])
-							else
-								(map (\x -> show x) [maxValue,maxValue-1..2]) ++ ["A"]
-		fromIntegral (Deck.howManyCards matchingCards deck) / fromIntegral (totalCardsInDeck deck)
+	else
+        let maxValue = edge - 1
+            matchingCards = if maxValue >= 10
+			                then ["J", "K", "Q"] ++ map show [10,9..2]
+							else map show [maxValue, maxValue-1..2] ++ ["A"]
+            probCount = fromIntegral (Deck.howManyCards matchingCards deck)
+            total     = fromIntegral (Deck.totalCardsInDeck deck)
+        in probCount / total
 
 blackjackProb :: [String] -> Map.Map String Int -> Double 
-blackjackProb cards deck = do
-	let blackjackEdge = 21 - (Aux.sumCards cards)
-	let matchingCards = if blackjackEdge `elem` [2..9] then
-		                    [show blackjackEdge]
-						else if blackjackEdge `elem` [1, 11] then
-						    ["A"]
-						else if blackjackEdge == 10 then
-						    ["J", "K", "Q", "10"]
-						else []
-	fromIntegral (Deck.howManyCards matchingCards deck) / fromIntegral (totalCardsInDeck deck)
+blackjackProb cards deck = 
+    let blackjackEdge = 21 - (Aux.sumCards cards)
+        matchingCards = case blackjackEdge of
+			n | n `elem` [2..9]    -> [show n]
+			n | n `elem` [1, 11]   -> ["A"]
+			10                     -> ["J", "K", "Q", "10"]
+			_                      -> []
+        probCount = fromIntegral (Deck.howManyCards matchingCards deck)
+        total = fromIntegral (Deck.totalCardsInDeck deck)
+    in probCount / total
 
 calculateProbs :: Map.Map String [String] -> (Double, Double)
 calculateProbs cardsMap = do
@@ -79,11 +68,11 @@ calculateProbs cardsMap = do
 								["J", "K", "Q", "A"] ++ (map (\x -> show x) [2..10])
 							else
 								["A"] ++ (map (\x -> show x) [2..diff])
-		let randomIdx = randomInt 0 ((length possibilities) - 1)
+		let randomIdx = Aux.randomInt 0 ((length possibilities) - 1)
 		let randomElement = possibilities !! randomIdx
 		let newUserCards = userCards ++ [randomElement]
 		let newUserSum = Aux.sumCards newUserCards
 		let updatedDeck = Deck.removeCards (userCards ++ dealerCards) starterDeck
 		let probGanharSemPuxar = underflowProb dealerCards (Aux.sumCards userCards) updatedDeck
 		let probGanharPuxando = blackjackProb userCards updatedDeck + (underflowBlackjackProb userCards updatedDeck * underflowProb dealerCards newUserSum (Deck.removeCards [randomElement] updatedDeck))
-		(probGanharPuxando, probGanharSemPuxar)
+		(Aux.truncateAt (probGanharPuxando * 100) 2, Aux.truncateAt (probGanharSemPuxar * 100) 2)
