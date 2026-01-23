@@ -1,10 +1,11 @@
 module Util.Game (gameLoop) where 
 
-import Util.AuxiliarFunctions (setUpCards, sumCards, verifyQauntityCards)
-import Components.Button (buttonUnicode)
 import qualified Data.Map as Map
 import Data.Maybe (fromJust)
 import Data.Char (toLower)
+import Util.AuxiliarFunctions (setUpCards, sumCards, verifyQauntityCards)
+import Components.Button (buttonUnicode)
+import Components.ProbAlgorithm as Prob
 
 showResult :: (Float, Float) -> IO ()
 showResult possibilites = do
@@ -46,6 +47,7 @@ gameLoop = do
         else putStrLn "Quantidade de cartas acima de 4" 
 
     -- call do algoritmo (Funcionalidade 2)
+    let probTuple = Prob.calculateProbs mapCards
 
     -- mostrar as possibilidades (Funcionalidade 4)
     -- showResult possibilidades
