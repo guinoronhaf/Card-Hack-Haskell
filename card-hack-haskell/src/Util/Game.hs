@@ -7,6 +7,7 @@ import Util.AuxiliaryFunctions (setUpCards, sumCards, verifyQauntityCards)
 import Components.Button (buttonUnicode)
 import Components.ProbAlgorithm as Prob
 import Components.ProbInterpreter as Interpreter
+import Control.Concurrent (threadDelay)
 
 userOption :: IO ()
 userOption = do
@@ -30,6 +31,7 @@ nextGame = do
 
 gameLoop :: IO ()
 gameLoop = do
+    putStrLn ""
     buttonUnicode "Digite as suas cartas (separadas por ''):"
     usersCard <- getLine
 
@@ -42,7 +44,13 @@ gameLoop = do
         then do 
             putStrLn ""
             putStrLn "Calculando as probabilidades..."
+            
+            threadDelay 2000000
+            
             putStrLn "Analizando todas as combinações..."
+            
+            threadDelay 2000000
+
             putStrLn "Análise concluída: "
             putStrLn ""
         
