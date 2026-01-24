@@ -73,30 +73,47 @@ blackjackProb cards deck =
         total = fromIntegral (Deck.totalCardsInDeck deck)
     in probCount / total
 
+avarageProbUserAboveDealerInterface :: ([String], [String]) -> (Double, Double)
+avarageProbUserAboveDealerInterface tuple = avaregeProbUserAboveDealer tuple 50.0 1.0 (probUserAboveDealer tuple)
+
+avaregeProbUserAboveDealer :: ([String], [String]) -> Double -> Double -> (Double, Double) -> (Double, Double)
+avaregeProbUserAboveDealer tuple timesLimit times (getCardProb, stayProb)
+    | times == timesLimit   = (Aux.truncateAt (getCardProb / timesLimit) 2, Aux.truncateAt (stayProb / timesLimit) 2)
+    | otherwise             = avaregeProbUserAboveDealer tuple timesLimit (times + 1) ((getCardProb + newGetCardProb), (stayProb + newStayProb))
+    where
+        newProb        = probUserAboveDealer tuple
+        newGetCardProb = fst newProb
+        newStayProb    = snd newProb
+                                
+
+probUserAboveDealer :: ([String], [String]) -> (Double, Double)
+probUserAboveDealer (userCards, dealerCards) =
+    let starterDeck = Deck.generateDeck
+        updatedDeck = Deck.removeCards (userCards ++ dealerCards) starterDeck
+        underflowEdge = 21 - (Aux.sumCards userCards) - 1
+        underflowEdgeCards = if underflowEdge >= 10 
+							    then ["J", "K", "Q", "A"] ++ map show [2..10]
+							    else ["A"] ++ map show [2..underflowEdge]
+        randomElement = underflowEdgeCards !! (Aux.randomInt 0 ((length underflowEdgeCards) - 1))
+        userCardsAfterPossiblePick = userCards ++ [randomElement]
+        sumUserCardsAfterPick = Aux.sumCards userCardsAfterPossiblePick
+        deckAfterUserPick = Deck.removeCards [randomElement] updatedDeck
+        noPickVictoryProb = underflowProb dealerCards (Aux.sumCards userCards) updatedDeck * 100
+        pickVictoryProb = if (Aux.sumCards userCards > Aux.sumCards dealerCards)
+                            then (underflowBlackjackProb userCards updatedDeck * underflowProb dealerCards sumUserCardsAfterPick deckAfterUserPick + blackjackProb userCards updatedDeck) * 100
+							else (overflowProb userCards (Aux.sumCards dealerCards) updatedDeck * underflowBlackjackProb userCardsAfterPossiblePick deckAfterUserPick * underflowProb dealerCards sumUserCardsAfterPick deckAfterUserPick + blackjackProb userCards updatedDeck) * 100
+	in (Aux.truncateAt pickVictoryProb 2, Aux.truncateAt noPickVictoryProb 2)
+
 -- * Função principal para cálculo de probabilidade
 -- | Calcula as probabilidades de o usuário vencer a rodada pegando, ou não, uma nova carta.
 -- Recebe um mapa de Strings para lista de Strings @cardsMap@ (que representa as cartas do `user` e do `dealer`) e calcula as probabilidades, retornando uma tupla de elementos do tipo Double.
 calculateProbs :: Map.Map String [String] -> (Double, Double)
 calculateProbs cardsMap =
-    let starterDeck = Deck.generateDeck
-        userCards = fromJust (Map.lookup "user" cardsMap)
+    let userCards = fromJust (Map.lookup "user" cardsMap)
         dealerCards = fromJust (Map.lookup "dealer" cardsMap)
 	in if isBlackjack userCards then
-		(0.0, 1.0)
+		(0.00, 100.00)
 	else if isOverflow userCards then
-		(0.0, 0.0)
+		(0.00, 0.00)
 	else
-        let updatedDeck = Deck.removeCards (userCards ++ dealerCards) starterDeck
-            underflowEdge = 21 - (Aux.sumCards userCards) - 1
-            underflowEdgeCards = if underflowEdge >= 10 
-							     then ["J", "K", "Q", "A"] ++ map show [2..10]
-							     else ["A"] ++ map show [2..underflowEdge]
-            randomElement = underflowEdgeCards !! (Aux.randomInt 0 ((length underflowEdgeCards) - 1))
-            userCardsAfterPossiblePick = userCards ++ [randomElement]
-            sumUserCardsAfterPick = Aux.sumCards userCardsAfterPossiblePick
-            deckAfterUserPick = Deck.removeCards [randomElement] updatedDeck
-            noPickVictoryProb = underflowProb dealerCards (Aux.sumCards userCards) updatedDeck * 100
-            pickVictoryProb = if (Aux.sumCards userCards > Aux.sumCards dealerCards)
-                              then (underflowBlackjackProb userCards updatedDeck * underflowProb dealerCards sumUserCardsAfterPick deckAfterUserPick + blackjackProb userCards updatedDeck) * 100
-							  else (overflowProb userCards (Aux.sumCards dealerCards) updatedDeck * underflowBlackjackProb userCardsAfterPossiblePick deckAfterUserPick * underflowProb dealerCards sumUserCardsAfterPick deckAfterUserPick + blackjackProb userCards updatedDeck) * 100
-		in (Aux.truncateAt pickVictoryProb 2, Aux.truncateAt noPickVictoryProb 2)
+        avarageProbUserAboveDealerInterface (userCards, dealerCards)
