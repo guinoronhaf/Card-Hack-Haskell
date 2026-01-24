@@ -53,5 +53,5 @@ gameLoop = do
     -- showResult possibilidades
 
     -- solicitair reinicio de programa (Fucnionalidade 5)
-    -- nextGame
     print(probTuple)
+    nextGame
