@@ -1,5 +1,6 @@
-# Card-Hack-Haskell
-Implementação de Card Hack em Haskell.
+#                                                   Card-Hack-Haskell
+
+Calculando a melhor jogada para 
 
 Considerando que o `stack` esteja instalado na máquina, primeiro vá para o diretório raiz do projeto:
 
