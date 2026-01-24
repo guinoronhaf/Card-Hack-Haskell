@@ -1,4 +1,4 @@
-module Util.AuxiliarFunctions (getStrValue, sumCards, adjustAces, setUpCards, verifyQauntityCards, truncateAt, randomInt) where
+module Util.AuxiliaryFunctions (getStrValue, sumCards, adjustAces, setUpCards, verifyQauntityCards, truncateAt, randomInt) where
 
 import Text.Read (readMaybe)
 import Control.Monad (unless)

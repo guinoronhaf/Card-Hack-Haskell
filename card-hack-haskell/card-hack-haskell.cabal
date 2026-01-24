@@ -29,7 +29,7 @@ library
       Components.Deck
       Components.ProbAlgorithm
       Lib
-      Util.AuxiliarFunctions
+      Util.AuxiliaryFunctions
       Util.Game
   other-modules:
       Paths_card_hack_haskell

@@ -3,7 +3,7 @@ module Util.Game (gameLoop) where
 import qualified Data.Map as Map
 import Data.Maybe (fromJust)
 import Data.Char (toLower)
-import Util.AuxiliarFunctions (setUpCards, sumCards, verifyQauntityCards)
+import Util.AuxiliaryFunctions (setUpCards, sumCards, verifyQauntityCards)
 import Components.Button (buttonUnicode)
 import Components.ProbAlgorithm as Prob
 
