@@ -39,15 +39,19 @@ gameLoop = do
     let mapCards = setUpCards [usersCard, dealersCard]
 
     if verifyQauntityCards mapCards
-    then do 
-        putStrLn ""
+        then do 
+            putStrLn ""
+            putStrLn "Calculando as probabilidades..."
+            putStrLn "Analizando todas as combinações..."
+            putStrLn "Análise concluída: "
+            putStrLn ""
         
-        -- call do algoritmo (Funcionalidade 2)
-        let probTuple = Prob.calculateProbs mapCards
+            -- call do algoritmo (Funcionalidade 2)
+            let probTuple = Prob.calculateProbs mapCards
 
-        -- mostrar as possibilidades (Funcionalidade 4)
-        putStrLn $ Interpreter.probAnalise probTuple
-    else do
-        putStrLn "ERRO: quantidade de um unico numero de carta acima de 4"
+            -- mostrar as possibilidades (Funcionalidade 4)
+            putStrLn $ Interpreter.probAnalise probTuple
+        else do
+            putStrLn "ERRO: quantidade de um unico numero de carta acima de 4"
 
     nextGame

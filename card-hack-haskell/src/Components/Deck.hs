@@ -1,10 +1,10 @@
-module Components.Deck (generateDeck, removeCards, howManyCards) where 
+module Components.Deck (generateDeck, removeCards, howManyCards, totalCardsInDeck) where 
 
 import qualified Data.Map as Map
 import Data.Maybe (isJust, fromJust) 
 
 cardsList :: [String]
-cardsList = (map (\n -> show n) [2..10]) ++ ["J", "K", "Q", "A"]
+cardsList = (map show [2..10]) ++ ["J", "K", "Q", "A"]
 
 generateDeck :: Map.Map String Int 
 generateDeck = Map.fromList (map (\x -> (x, 4)) cardsList)
@@ -30,3 +30,6 @@ getByKey key deckMap = do
 howManyCards :: [String] -> Map.Map String Int -> Int
 howManyCards [] _ = 0
 howManyCards (x:xs) deckMap = (getByKey x deckMap) + howManyCards xs deckMap
+
+totalCardsInDeck :: Map.Map String Int -> Int
+totalCardsInDeck deckMap = howManyCards cardsList deckMap
