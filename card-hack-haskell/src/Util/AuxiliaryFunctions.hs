@@ -1,3 +1,7 @@
+{-|
+Module		: AuxiliaryFunctions
+Description : Conjunto de funções auxiliares de uso do sistema
+-}
 module Util.AuxiliaryFunctions (getStrValue, sumCards, adjustAces, setUpCards, verifyQauntityCards, truncateAt, randomInt) where
 
 import Text.Read (readMaybe)
@@ -6,6 +10,17 @@ import Data.Maybe (fromJust)
 import qualified Data.Map as Map
 import System.Random (randomRIO)
 import System.IO.Unsafe (unsafePerformIO)
+
+-- * Funções meramente utilitárias, sem relação com os símbolos das cartas do baralho.
+-- | Trunca valores decimais a partir de um número específico de casas decimais.
+-- Retorna um valor decimal @x@ devidamente truncado em @n@ casas decimais.
+truncateAt :: Double -> Int -> Double
+truncateAt x n = fromIntegral (floor (x * (10 ^ n))) / (10 ^ n)
+
+-- | Gera um valor pseudoaleatório do tipo Inteiro.
+-- Retorna um Inteiro a partir de dois valores que norteiam o intervalo: @low@ e @high@
+randomInt :: Int -> Int -> Int
+randomInt low high = unsafePerformIO $ randomRIO (low, high)
 
 -- função split
 split :: Char -> String -> [String]
@@ -62,9 +77,3 @@ createMapCardsInput usersTuple = Map.fromList (map (\x -> (x, (getCardQuantity u
 
 getCardQuantity :: [String] -> String -> Int
 getCardQuantity cards x = length (filter (== x) cards)
-
-truncateAt :: Double -> Int -> Double
-truncateAt x n = fromIntegral (floor (x * (10 ^ n))) / (10 ^ n)
-
-randomInt :: Int -> Int -> Int
-randomInt low high = unsafePerformIO $ randomRIO (low, high)
