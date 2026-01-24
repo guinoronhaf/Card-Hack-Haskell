@@ -28,6 +28,7 @@ library
       Components.Button
       Components.Deck
       Components.ProbAlgorithm
+      Components.ProbInterpreter
       Lib
       Util.AuxiliaryFunctions
       Util.Game

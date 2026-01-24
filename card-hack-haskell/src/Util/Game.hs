@@ -6,11 +6,7 @@ import Data.Char (toLower)
 import Util.AuxiliaryFunctions (setUpCards, sumCards, verifyQauntityCards)
 import Components.Button (buttonUnicode)
 import Components.ProbAlgorithm as Prob
-
-showResult :: (Float, Float) -> IO ()
-showResult possibilites = do
-    putStrLn $ "Chance de vencer ao puxar mais uma carta: " ++ show (fst possibilites)
-    putStrLn $ "Chance de vencer ao não puxar nehuma carta"  ++ show (snd possibilites)
+import Components.ProbInterpreter as Interpreter
 
 userOption :: IO ()
 userOption = do
@@ -42,16 +38,20 @@ gameLoop = do
 
     let mapCards = setUpCards [usersCard, dealersCard]
 
-    if verifyQauntityCards mapCards 
-        then putStrLn "Quantidade Ok de cartas"
-        else putStrLn "Quantidade de cartas acima de 4" 
+    if verifyQauntityCards mapCards
+        then do 
+            putStrLn ""
+            putStrLn "Calculando as probabilidades..."
+            putStrLn "Analizando todas as combinações..."
+            putStrLn "Análise concluída: "
+            putStrLn ""
+        
+            -- call do algoritmo (Funcionalidade 2)
+            let probTuple = Prob.calculateProbs mapCards
 
-    -- call do algoritmo (Funcionalidade 2)
-    let probTuple = Prob.calculateProbs mapCards
+            -- mostrar as possibilidades (Funcionalidade 4)
+            putStrLn $ Interpreter.probAnalise probTuple
+        else do
+            putStrLn "ERRO: quantidade de um unico numero de carta acima de 4"
 
-    -- mostrar as possibilidades (Funcionalidade 4)
-    -- showResult possibilidades
-
-    -- solicitair reinicio de programa (Fucnionalidade 5)
-    print(probTuple)
     nextGame
