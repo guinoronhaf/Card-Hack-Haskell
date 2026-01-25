@@ -53,7 +53,7 @@ underflowProb cards limit deck =
 	else
         let maxValue = edge - 1
             matchingCards = if maxValue >= 10
-			                then ["J", "K", "Q"] ++ map show [10,9..2]
+			                then ["J", "K", "Q", "A"] ++ map show [10,9..2]
 							else map show [maxValue, maxValue-1..2] ++ ["A"]
             probCount = fromIntegral (Deck.howManyCards matchingCards deck)
             total     = fromIntegral (Deck.totalCardsInDeck deck)
