@@ -1,8 +1,4 @@
-<center>
-
-# Card-Hack-Haskell
-
-</center>
+<h1 align="center">Card-Hack-Haskell</h1>
 
 _Blackjack_, também conhecido como "21", é um jogo de cartas bastante popular em cassinos e casas de aposta no mundo todo. Suas regras simples podem escondem sua natureza probabilística interessante. Nesse sentido, _Card-Hack_ implementa, em _Haskell_, um algoritmo de probabilidades que determina a melhor jogada possível em um contexto de rodadas de _Blackjack_.
 
