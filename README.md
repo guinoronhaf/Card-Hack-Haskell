@@ -1,6 +1,6 @@
 <h1 align="center">Card-Hack-Haskell</h1>
 
-_Blackjack_, também conhecido como "21", é um jogo de cartas bastante popular em cassinos e casas de aposta no mundo todo. Suas regras simples podem escondem sua natureza probabilística interessante. Nesse sentido, _Card-Hack_ implementa, em _Haskell_, um algoritmo de probabilidades que determina a melhor jogada possível em um contexto de rodadas de _Blackjack_.
+_Blackjack_, também conhecido como "21", é um jogo de cartas bastante popular em cassinos e casas de aposta no mundo todo. Suas regras simples podem esconder sua natureza probabilística interessante. Nesse sentido, _Card-Hack_ implementa em _Haskell_ um algoritmo de probabilidades que determina a melhor jogada possível em um contexto de rodadas de _Blackjack_.
 
 ---
 
@@ -10,7 +10,7 @@ _Blackjack_, também conhecido como "21", é um jogo de cartas bastante popular 
  - [Blackjack: objetivos e movimentos](#blackjack-objetivos-e-movimentos)
  - [Cálculo de probabilidades](#cálculo-de-probabilidades)
  - [Como executar o algoritmo](#como-executar-o-algoritmo)
- - [Contribuidores deste repositório](#contribuidores-deste-repositório^:)
+ - [Contribuidores deste repositório](#contribuidores-deste-repositório)
 
 ## Estrutura de diretórios
 
@@ -89,7 +89,14 @@ Para que vença o _stay_ em sua próxima jogada, apenas um caso é considerado:
 
 Para exemplificar nossos casos, consideremos então o caso válido. Nesse caso, a probabilidade de o jogador vencer em sua próxima jogada optando por _stay_ é:
 
-**ProbVitoria = Probabilidade de o _Dealer_ pegar uma carta e ficar abaixo da pontuação do jogador**
+**ProbVitoria = Probabilidade de o _Dealer_ pegar uma carta e ficar abAixo da pontuação do jogador**
+
+### Componentes importantes
+
+ - `AuxiliaryFunctions.hs`: módulo auxiliar que contém funções auxiliares para os componentes principais da aplicação;
+ - `Deck.hs`: módulo auxiliar que representa um baralho (_deck_) convencional. Fundamental para a contagem de cartas no cálculo das probabiliades;
+ - `ProbAlgorith.hs`: módulo lógico que calcula efetivamente todas as probabilidades a partir de funções auxiliares como `underflowProb`, `blackjackProb` e `overlfowProb`;
+ - `ProbInterpreter.hs`: módulo intermediário responsável por tratar as probabilidades recebidas do módulo lógico e devolver uma mensagem ao usuário da aplicação;
 
 ## Executando o algoritmo
 
