@@ -21,7 +21,7 @@ probAnalise (0.00, 100.00) = unlines
 probAnalise (getCardProb, stayProb)
     | diff <= 10.00  && diff >= 5.00   =
         unlines
-            [ "As probabilidades indicam que apresenta uma grande semelhança nas probabilidades,"
+            [ "As probabilidades indicam que existe uma grande semelhança nas probabilidades,"
             , "contudo a probabilidade de puxar uma carta é um pouco melhor:"
             , showProbs
             ]

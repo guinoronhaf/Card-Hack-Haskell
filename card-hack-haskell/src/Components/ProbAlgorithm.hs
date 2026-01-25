@@ -73,21 +73,21 @@ blackjackProb cards deck =
         total = fromIntegral (Deck.totalCardsInDeck deck)
     in probCount / total
 
-avarageProbUserAboveDealerInterface :: ([String], [String]) -> (Double, Double)
-avarageProbUserAboveDealerInterface tuple = avaregeProbUserAboveDealer tuple 50.0 1.0 (probUserAboveDealer tuple)
+averageProbUserInterface :: ([String], [String]) -> (Double, Double)
+averageProbUserInterface tuple = avaregeProbUser tuple 50.0 1.0 (probUser tuple)
 
-avaregeProbUserAboveDealer :: ([String], [String]) -> Double -> Double -> (Double, Double) -> (Double, Double)
-avaregeProbUserAboveDealer tuple timesLimit times (getCardProb, stayProb)
+avaregeProbUser :: ([String], [String]) -> Double -> Double -> (Double, Double) -> (Double, Double)
+avaregeProbUser tuple timesLimit times (getCardProb, stayProb)
     | times == timesLimit   = (Aux.truncateAt (getCardProb / timesLimit) 2, Aux.truncateAt (stayProb / timesLimit) 2)
-    | otherwise             = avaregeProbUserAboveDealer tuple timesLimit (times + 1) ((getCardProb + newGetCardProb), (stayProb + newStayProb))
+    | otherwise             = avaregeProbUser tuple timesLimit (times + 1) ((getCardProb + newGetCardProb), (stayProb + newStayProb))
     where
-        newProb        = probUserAboveDealer tuple
+        newProb        = probUser tuple
         newGetCardProb = fst newProb
         newStayProb    = snd newProb
                                 
 
-probUserAboveDealer :: ([String], [String]) -> (Double, Double)
-probUserAboveDealer (userCards, dealerCards) =
+probUser :: ([String], [String]) -> (Double, Double)
+probUser (userCards, dealerCards) =
     let starterDeck = Deck.generateDeck
         updatedDeck = Deck.removeCards (userCards ++ dealerCards) starterDeck
         underflowEdge = 21 - (Aux.sumCards userCards) - 1
@@ -116,4 +116,4 @@ calculateProbs cardsMap =
 	else if isOverflow userCards then
 		(0.00, 0.00)
 	else
-        avarageProbUserAboveDealerInterface (userCards, dealerCards)
+        averageProbUserInterface (userCards, dealerCards)

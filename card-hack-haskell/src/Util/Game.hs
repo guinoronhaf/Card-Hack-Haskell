@@ -47,7 +47,7 @@ gameLoop = do
             
             threadDelay 2000000
             
-            putStrLn "Analizando todas as combinações..."
+            putStrLn "Analisando todas as combinações..."
             
             threadDelay 2000000
 
