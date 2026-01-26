@@ -5,7 +5,6 @@ Description : Conjunto de funções auxiliares de uso do sistema
 module Util.AuxiliaryFunctions (getStrValue, sumCards, adjustAces, setUpCards, verifyQauntityCards, truncateAt, randomInt) where
 
 import Text.Read (readMaybe)
-import Control.Monad (unless)
 import Data.Maybe (fromJust)
 import qualified Data.Map as Map
 import System.Random (randomRIO)
@@ -52,7 +51,8 @@ adjustAces total aces
   | total <= 21 || aces == 0 = total -- ajusta o valor total, enquanto o "A" valer 11 
   | otherwise = adjustAces (total - 10) (aces - 1)  -- caso não entre na primeira condição, ele chama recursivamente subtraindo o valor total por 10 e diminuindo um 'As' na quantidade
 
--- enviar o input do usuario primeiro no [String]
+-- Processa os inputs do usuário e do dealer, separando as cartas
+-- e organizando-as em um Map com as chaves "user" e "dealer"
 setUpCards :: [String] -> Map.Map String [String]
 setUpCards inputs =
     let cardsToArray = map (split ' ') inputs
@@ -60,20 +60,36 @@ setUpCards inputs =
         dealersTuple = cardsToArray !! 1
     in Map.fromList [("user", usersTuple), ("dealer", dealersTuple)]
 
+-- Verifica se a quantidade total de cartas do usuário e do dealer
+-- não ultrapassa o limite permitido no baralho
 verifyQauntityCards :: Map.Map String [String] -> Bool
-verifyQauntityCards m = validateQuantityTuple (fromJust (Map.lookup "user" m)) (head (fromJust (Map.lookup "dealer" m))) 
-        
+verifyQauntityCards m =
+    validateQuantityTuple
+        (fromJust (Map.lookup "user" m))
+        (head (fromJust (Map.lookup "dealer" m))) 
+
+-- Valida se a combinação das cartas do usuário com a carta do dealer
+-- respeita o limite máximo de ocorrências por carta
 validateQuantityTuple :: [String] -> String -> Bool
 validateQuantityTuple usersTuple dealerCard =
     let mapInput    = createMapCardsInput usersTuple
         mapAdjusted = Map.adjust (+1) dealerCard mapInput
     in filterQuantityAboveLimitCards mapAdjusted
 
+-- Verifica se nenhuma carta ultrapassa o limite máximo permitido (4)
+-- retornando True caso esteja tudo válido
 filterQuantityAboveLimitCards :: Map.Map String Int -> Bool
-filterQuantityAboveLimitCards m = Map.null (Map.filter (> 4) m)
+filterQuantityAboveLimitCards m =
+    Map.null (Map.filter (> 4) m)
 
+-- Cria um Map onde cada carta do usuário é associada
+-- à quantidade de vezes que ela aparece na mão
 createMapCardsInput :: [String] -> Map.Map String Int
-createMapCardsInput usersTuple = Map.fromList (map (\x -> (x, (getCardQuantity usersTuple x))) usersTuple)
+createMapCardsInput usersTuple =
+    Map.fromList (map (\x -> (x, getCardQuantity usersTuple x)) usersTuple)
 
+-- Conta quantas vezes uma carta específica aparece na lista de cartas
 getCardQuantity :: [String] -> String -> Int
-getCardQuantity cards x = length (filter (== x) cards)
+getCardQuantity cards x =
+    length (filter (== x) cards)
+

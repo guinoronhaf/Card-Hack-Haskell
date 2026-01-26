@@ -1,14 +1,14 @@
 module Util.Game (gameLoop) where 
 
-import qualified Data.Map as Map
-import Data.Maybe (fromJust)
 import Data.Char (toLower)
-import Util.AuxiliaryFunctions (setUpCards, sumCards, verifyQauntityCards)
+import Util.AuxiliaryFunctions (setUpCards, verifyQauntityCards)
 import Components.Button (buttonUnicode)
 import Components.ProbAlgorithm as Prob
 import Components.ProbInterpreter as Interpreter
 import Control.Concurrent (threadDelay)
 
+-- Lê a opção do usuário após o término de uma rodada
+-- permitindo iniciar um novo jogo ou encerrar o programa
 userOption :: IO ()
 userOption = do
     userInput <- getLine
@@ -21,7 +21,8 @@ userOption = do
         _ -> do
             putStrLn "Opção inválida"
             userOption
-            
+
+-- Exibe as opções disponíveis ao usuário após o fim de uma rodada
 nextGame :: IO ()
 nextGame = do 
     buttonUnicode "Jogar novamente (J)"
@@ -29,6 +30,8 @@ nextGame = do
 
     userOption
 
+-- Controla o fluxo principal do jogo, realizando a leitura das cartas,
+-- validações, cálculo das probabilidades e exibição do resultado
 gameLoop :: IO ()
 gameLoop = do
     putStrLn ""
@@ -54,12 +57,10 @@ gameLoop = do
             putStrLn "Análise concluída: "
             putStrLn ""
         
-            -- call do algoritmo (Funcionalidade 2)
             let probTuple = Prob.calculateProbs mapCards
-
-            -- mostrar as possibilidades (Funcionalidade 4)
             putStrLn $ Interpreter.probAnalise probTuple
         else do
             putStrLn "ERRO: quantidade de um unico numero de carta acima de 4"
 
     nextGame
+

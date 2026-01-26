@@ -1,5 +1,7 @@
 module Components.ProbInterpreter (probAnalise) where
 
+-- Analisa as probabilidades de puxar uma carta ou manter as cartas no Blackjack
+-- e retorna uma mensagem textual indicando a melhor decisão com base nos valores
 probAnalise :: (Double, Double) -> String
 probAnalise (0.00, 0.00) = unlines 
     ["OverFlow da quantidade de pontos do usuário, impossível tomar alguma ação.",
